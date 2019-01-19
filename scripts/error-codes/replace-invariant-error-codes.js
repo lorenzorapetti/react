@@ -7,6 +7,7 @@
 'use strict';
 
 const fs = require('fs');
+const { addDefault } = require('@babel/helper-module-imports');
 const evalToString = require('../shared/evalToString');
 const invertObject = require('./invertObject');
 
@@ -18,10 +19,10 @@ module.exports = function(babel) {
   // Generate a hygienic identifier
   function getProdInvariantIdentifier(path, file, localState) {
     if (!localState.prodInvariantIdentifier) {
-      localState.prodInvariantIdentifier = file.addImport(
+      localState.prodInvariantIdentifier = addDefault(
+        path,
         'shared/reactProdInvariant',
-        'default',
-        'prodInvariant'
+        { nameHint: 'prodInvariant' }
       );
     }
     return localState.prodInvariantIdentifier;
